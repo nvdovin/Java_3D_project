@@ -28,7 +28,7 @@ public class Matrix {
         }
     }
 
-    public static double[] rotate(String arg, double angle, double[][] point ){
+    public static double[][] rotate(String arg, double angle, double[][] point ){
         double[][] rotate_x = {
             {1, 0, 0},
             {0, Math.cos(angle), -Math.sin(angle)},
@@ -59,13 +59,13 @@ public class Matrix {
             case "xz": matrix = multiple_matrixes(point, rotate_xz); break;
             case "yz": matrix = multiple_matrixes(point, rotate_yz); break;
             case "xyz": matrix = multiple_matrixes(point, rotate_xyz); break;
-            default: matrix = {
+            default: matrix = new double[][]{
                     {1, 0, 0},
                     {0, 1, 0},
                     {0, 0, 1}
-            }; break;
+            };
         }
-        return  matrix;
+        return matrix;
 
     }
 
