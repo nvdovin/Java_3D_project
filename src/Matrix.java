@@ -1,34 +1,43 @@
 public class Matrix {
 
-    public static double[][] multiple_matrixes(double[][] matrix1, double[][] matrix2){
-        int matrix1_cols = matrix1.length, matrix1_rows = matrix1[0].length;
-        int matrix2_cols = matrix2.length, matrix2_rows = matrix2[0].length;
+    public static double[][] multiple_2_matrices(double[][] matrix1, double[][] matrix2){
+        double[][] result = new double[matrix1.length][matrix2[0].length];
 
-        if (matrix1_cols == matrix2_rows){
-            double[][] summed_matrix = new double[matrix2_rows][matrix1_cols];
-            for (int n = 0; n < matrix1_cols; n++){
-                double current_volume = 0;
-                for (int m = 0; m < matrix2_rows; m++){
-                    current_volume += matrix1[n][m] * matrix2[m][n];
-                    summed_matrix[n][m] = current_volume;
+        for (int i = 0; i < matrix1.length; i++) {
+            for (int j = 0; j < matrix2[0].length; j++) {
+                for (int k = 0; k < matrix2.length; k++) {
+                    result[i][j] += matrix1[i][k] * matrix2[k][j];
                 }
             }
-            return summed_matrix;
         }
-        else {
-            double[][] summed_matrix = new double[matrix2_rows][matrix1_cols];
-            for (int n = 0; n < matrix1_cols; n++){
-                double current_volume = 0;
-                for (int m = 0; m < matrix2_rows; m++){
-                    current_volume += matrix1[n][m] * matrix2[m][n];
-                    summed_matrix[n][m] = current_volume;
-                }
-            }
-            return summed_matrix;
-        }
+        return result;
     }
 
-    public static double[][] rotate(String arg, double angle, double[][] point ){
+    public static int[] multiple_matrix_and_vector(double[][] matrix, int[] point){
+        if (matrix[0].length != point.length) {
+            throw new IllegalArgumentException("Matrix columns must be equal to vector length.");
+        }
+
+        int rows = matrix.length;
+        int columns = matrix[0].length;
+
+        int[] result = new int[rows];
+
+        for (int i = 0; i < rows; i++) {
+            int sum = 0;
+
+            for (int j = 0; j < columns; j++) {
+                sum += matrix[i][j] * point[j];
+            }
+
+            result[i] = sum;
+        }
+
+        return result;
+    }
+
+    public static int[] rotate_point(String arg, double angle, int[] point ){
+        int[] new_point;
         double[][] rotate_x = {
             {1, 0, 0},
             {0, Math.cos(angle), -Math.sin(angle)},
@@ -44,29 +53,46 @@ public class Matrix {
                 {Math.sin(angle), Math.cos(angle), 0},
                 {0, 0, 1}
         };
-        double[][] rotate_xy = multiple_matrixes(rotate_x, rotate_y);
-        double[][] rotate_xz = multiple_matrixes(rotate_x, rotate_z);
-        double[][] rotate_yz = multiple_matrixes(rotate_y, rotate_z);
-        double[][] rotate_xyz = multiple_matrixes(rotate_xy, rotate_yz);
-
-        double[][] matrix;
 
         switch (arg){
-            case "x": matrix = multiple_matrixes(point, rotate_x); break;
-            case "y": matrix = multiple_matrixes(point, rotate_y); break;
-            case "z": matrix = multiple_matrixes(point, rotate_z); break;
-            case "xy": matrix = multiple_matrixes(point, rotate_xy); break;
-            case "xz": matrix = multiple_matrixes(point, rotate_xz); break;
-            case "yz": matrix = multiple_matrixes(point, rotate_yz); break;
-            case "xyz": matrix = multiple_matrixes(point, rotate_xyz); break;
-            default: matrix = new double[][]{
-                    {1, 0, 0},
-                    {0, 1, 0},
-                    {0, 0, 1}
-            };
+            case "x": {
+                new_point = multiple_matrix_and_vector(rotate_x, point);
+                break;
+            }
+            case "y": {
+                new_point = multiple_matrix_and_vector(rotate_y, point);
+                break;
+            }
+            case "z": {
+                new_point = multiple_matrix_and_vector(rotate_z, point);
+                break;
+            }
+            case "xy": {
+                double[][] temp_matrix = multiple_2_matrices(rotate_x, rotate_y);
+                new_point = multiple_matrix_and_vector(temp_matrix, point);
+                break;
+            }
+            case "xz": {
+                double[][] temp_matrix = multiple_2_matrices(rotate_x, rotate_z);
+                new_point = multiple_matrix_and_vector(temp_matrix, point);
+                break;
+            }
+            case "yz": {
+                double[][] temp_matrix = multiple_2_matrices(rotate_y, rotate_z);
+                new_point = multiple_matrix_and_vector(temp_matrix, point);
+                break;
+            }
+            case "xyz": {
+                double[][] temp_matrix = multiple_2_matrices(rotate_x, rotate_y);
+                temp_matrix = multiple_2_matrices(temp_matrix, rotate_z);
+                new_point = multiple_matrix_and_vector(temp_matrix, point);
+                break;
+            }
+            default:{
+                new_point = point;
+            }
         }
-        return matrix;
-
+        return new_point;
     }
 
 }
