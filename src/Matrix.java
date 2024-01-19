@@ -13,7 +13,7 @@ public class Matrix {
         return result;
     }
 
-    public static int[] multiple_matrix_and_vector(double[][] matrix, int[] point){
+    public static double[] multiple_matrix_and_vector(double[][] matrix, int[] point){
         if (matrix[0].length != point.length) {
             throw new IllegalArgumentException("Matrix columns must be equal to vector length.");
         }
@@ -21,7 +21,7 @@ public class Matrix {
         int rows = matrix.length;
         int columns = matrix[0].length;
 
-        int[] result = new int[rows];
+        double[] result = new double[rows];
 
         for (int i = 0; i < rows; i++) {
             int sum = 0;
@@ -36,8 +36,9 @@ public class Matrix {
         return result;
     }
 
-    public static int[] rotate_point(String arg, double angle, int[] point ){
-        int[] new_point;
+    public static double[][] rotate_point(String arg, double angle, int[] point ){
+        double[][] adapted_point = {{point[0]}, {point[1]}, {point[2]}};
+        double[][] new_point;
         double[][] rotate_x = {
             {1, 0, 0},
             {0, Math.cos(angle), -Math.sin(angle)},
@@ -56,42 +57,41 @@ public class Matrix {
 
         switch (arg){
             case "x": {
-                new_point = multiple_matrix_and_vector(rotate_x, point);
+                new_point = multiple_2_matrices(rotate_x, adapted_point);
                 break;
             }
             case "y": {
-                new_point = multiple_matrix_and_vector(rotate_y, point);
+                new_point = multiple_2_matrices(rotate_y, adapted_point);
                 break;
             }
             case "z": {
-                new_point = multiple_matrix_and_vector(rotate_z, point);
+                new_point = multiple_2_matrices(rotate_z, adapted_point);
                 break;
             }
             case "xy": {
                 double[][] temp_matrix = multiple_2_matrices(rotate_x, rotate_y);
-                new_point = multiple_matrix_and_vector(temp_matrix, point);
+                new_point = multiple_2_matrices(temp_matrix, adapted_point);
                 break;
             }
             case "xz": {
                 double[][] temp_matrix = multiple_2_matrices(rotate_x, rotate_z);
-                new_point = multiple_matrix_and_vector(temp_matrix, point);
+                new_point = multiple_2_matrices(temp_matrix, adapted_point);
                 break;
             }
             case "yz": {
                 double[][] temp_matrix = multiple_2_matrices(rotate_y, rotate_z);
-                new_point = multiple_matrix_and_vector(temp_matrix, point);
+                new_point = multiple_2_matrices(temp_matrix, adapted_point);
                 break;
             }
             case "xyz": {
                 double[][] temp_matrix = multiple_2_matrices(rotate_x, rotate_y);
                 temp_matrix = multiple_2_matrices(temp_matrix, rotate_z);
-                new_point = multiple_matrix_and_vector(temp_matrix, point);
+                new_point = multiple_2_matrices(temp_matrix, adapted_point);
                 break;
             }
-            default:{
-                new_point = point;
-            }
+            default: new_point = adapted_point;
         }
+        
         return new_point;
     }
 

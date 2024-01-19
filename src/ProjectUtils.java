@@ -2,7 +2,7 @@ import java.io.IOException;
 
 
 
-public class GradientCircle {
+public class ProjectUtils {
     public static void main(String[] args) throws IOException {
         int WIGHT = 240, HEIGHT = 40;
         int cols_mid = WIGHT / 2, rows_mid = HEIGHT / 2, cor_HEIGHT = WIGHT / HEIGHT, cor_WIGHT = 2;
@@ -11,7 +11,7 @@ public class GradientCircle {
         int MAX_LEN = (int)Math.sqrt(Math.pow(rows_mid, 2) + Math.pow(cols_mid, 2));
 
         double alpha = 0;
-        while(true) {
+        while (true) {
             alpha += 0.005;
                 double beta = Math.cos(alpha * 10) * 100;
 
@@ -55,18 +55,49 @@ public class GradientCircle {
     public static void show_screen(int WIGHT, int HEIGHT, char[][] screen){
         //Here I want to create the method where I will can to show my screen
 
-
-
-        //String buffer = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
         String buffer = "";
         for (int y = 0; y < HEIGHT; y++){
             for (int x = 0; x < WIGHT; x++){
                 buffer += screen[x][y];
-//                System.out.print(screen[x][y]);
             }
             buffer += "\r\n";
-//            System.out.println();
         }
         System.out.print(buffer);
     }
+
+    public static int[][] get_lines(int[] point1, int[] point2){
+        // y = ((y1 - y0) / (x1 - x0) * (x - x0) + y0
+        // x += 1
+
+        double check_len = point2[0] - point1[0];
+        int[][] lines_coordinates = new int[(int)check_len][2];
+        if (point1 != point2){
+            int x = point1[0];
+            int i = 0;
+            if (check_len > 1){
+                while (x != point2[0]){
+                    int y = ((point2[1] - point1[1]) / (point2[0] - point1[0])) * (x  - point1[0]) + point2[0];
+                    x++;
+                    lines_coordinates[i][0] = x;
+                    lines_coordinates[i][1] = y;
+                }
+            } else if (check_len >= -1 || check_len <= 1) {
+                int vertical_len = Math.abs(point1[1] - point2[1]);
+                int highter_point = Math.max(point1[1], point2[1]);
+                for (int lower_point = Math.min(point1[1], point2[1]); lower_point <= highter_point; lower_point++){
+                    lines_coordinates[i][0] = x;
+                    lines_coordinates[i][1] = lower_point;
+                }
+            } else if (check_len < -1) {
+                while (x != point2[0]){
+                    int y = ((point2[1] - point1[1]) / (point2[0] - point1[0])) * (x  - point1[0]) + point2[0];
+                    x--;
+                    lines_coordinates[i][0] = x;
+                    lines_coordinates[i][1] = y;
+                }
+            }
+        }
+        return lines_coordinates;
+    }
+
 }
