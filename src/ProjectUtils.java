@@ -66,8 +66,10 @@ public class ProjectUtils {
     }
 
     public static int[][] get_lines(int[] point1, int[] point2){
-        // y = ((y1 - y0) / (x1 - x0) * (x - x0) + y0
-        // x += 1
+        /* Это фрмула, по которой мы можем найти все точки на отрезке между двумя точками
+        y = ((y1 - y0) / (x1 - x0) * (x - x0) + y0
+         x += 1
+         */
 
         double check_len = point2[0] - point1[0];
         int[][] lines_coordinates = new int[(int)check_len][2];

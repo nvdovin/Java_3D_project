@@ -28,7 +28,7 @@ class Main {
         String rotate = "xyz";
 
 //  Тело программы
-        for (double angle = 0; angle < 100; angle += 0.01) {
+        for (double angle = 0; angle < 100; angle += 0.05) {
 //            GradientCircle.clearConsole();
 
             char[][] screen = ProjectUtils.get_empty_screen(WIGHT, HEIGHT);
